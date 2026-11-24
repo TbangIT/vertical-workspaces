@@ -1720,6 +1720,30 @@ export default class VShell extends ExtensionPreferences {
 
         optionList.push(
             itemFactory.getRowWidget(
+                _('Touchpad & Gestures')
+            )
+        );
+
+        optionList.push(
+            itemFactory.getRowWidget(
+                _('Disable Touchpad Two-Finger Workspace Switching'),
+                _('Prevent two-finger touchpad scrolling from switching workspaces to avoid accidental triggers'),
+                itemFactory.newSwitch(),
+                'touchpadDisableTwoFingerScroll'
+            )
+        );
+
+        optionList.push(
+            itemFactory.getRowWidget(
+                _('Fast Swipe Threshold'),
+                _('Lower the touchpad swipe distance threshold (0.08) to snap to the next or previous workspace with minimal finger travel'),
+                itemFactory.newSwitch(),
+                'swipeFastThreshold'
+            )
+        );
+
+        optionList.push(
+            itemFactory.getRowWidget(
                 _('Notifications')
             )
         );

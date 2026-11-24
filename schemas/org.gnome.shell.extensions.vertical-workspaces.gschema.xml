@@ -307,6 +307,12 @@
     <key type="b" name="ws-switcher-ignore-last">
       <default>false</default>
     </key>
+    <key type="b" name="touchpad-disable-two-finger-scroll">
+      <default>true</default>
+    </key>
+    <key type="b" name="swipe-fast-threshold">
+      <default>true</default>
+    </key>
     <key type="i" name="favorites-notify">
       <default>1</default>
     </key>
