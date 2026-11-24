@@ -103,6 +103,9 @@
     <key type="i" name="show-overview-background">
       <default>1</default>
     </key>
+    <key type="s" name="custom-overview-bg-path">
+      <default>""</default>
+    </key>
     <key type="i" name="overview-bg-blur-sigma">
       <default>300</default>
     </key>

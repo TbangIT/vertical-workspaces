@@ -994,7 +994,21 @@ export default class VShell extends ExtensionPreferences {
                     [_('Disable (Default)'), 0],
                     [_('Enable - Fast Blur Transitions'), 1],
                     [_('Enable - Smooth Blur Transitions'), 2],
+                    [_('Enable - Custom Wallpaper'), 3],
                 ]
+            )
+        );
+
+        const customWallpaperWidget = itemFactory.newFileChooser();
+        customWallpaperWidget._dependsOnValue = 3;
+        optionList.push(
+            itemFactory.getRowWidget(
+                _('Custom Wallpaper Image'),
+                _('Select a custom image file for the overview background. Leave empty to use ~/Pictures/blurpaper.png (or ~/Immagini/blurpaper.png)'),
+                customWallpaperWidget,
+                'customOverviewBgPath',
+                null,
+                'showOverviewBackground'
             )
         );
 
