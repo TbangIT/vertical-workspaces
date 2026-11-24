@@ -96,11 +96,23 @@ export default class VShell extends Extension.Extension {
         this._init();
         this._initModules();
 
-        if (Main.layoutManager._startingUp && !this._startupConId)
-            this._activateVShellOnStartup();
-        else
-            this._activateVShell();
+        this._activateVShell();
 
+        if (Main.layoutManager._startingUp) {
+            this._startupConId = Main.layoutManager.connect('startup-complete', () => {
+                if (this._startupConId) {
+                    Main.layoutManager.disconnect(this._startupConId);
+                    this._startupConId = null;
+                }
+                if (opt.STARTUP_STATE === 1)
+                    Main.overview.hide();
+                else if (opt.STARTUP_STATE === 2) {
+                    Main.overview.show(2);
+                    if (Main.overview.dash?.showAppsButton)
+                        Main.overview.dash.showAppsButton.checked = true;
+                }
+            });
+        }
 
         console.debug(`${Me.metadata.name}: enabled`);
     }
@@ -167,44 +179,8 @@ export default class VShell extends Extension.Extension {
     }
 
     _activateVShellOnStartup() {
-        // Since GNOME 50 we cannot rely on patching the controls.runStartupAnimation()
-        // The workaround here is hiding the default startup animation and activate V-Shell when it's finished
-
-        // Minimize default animation duration
-        St.Settings.get().slow_down_factor = 0;
-        // Hide screen content until V-Shell is ready
-        const Color = Clutter.Color ?? Cogl.Color;
-        this._screenCover = new Clutter.Actor({
-            background_color: new Color({ red: 0, green: 0, blue: 0, alpha: 255 }),
-            width: global.screen_width,
-            height: global.screen_height,
-        });
-        Main.layoutManager.addChrome(this._screenCover);
-
-        this._startupConId = Main.layoutManager.connect('startup-complete', () => {
-            // Move the screen cover above all other actors
-            Main.layoutManager.uiGroup.set_child_above_sibling(this._screenCover, null);
-            Me.run.timeouts.startupAnimation = GLib.idle_add(GLib.PRIORITY_LOW, () => {
-                this._screenCover.destroy();
-                this._screenCover = null;
-                Me.run.timeouts.startupAnimation1 = GLib.idle_add(GLib.PRIORITY_LOW, () => {
-                    Me.run.delayedStartup = false;
-                    Main.overview._overview.controls.realizeAppDisplayAndFinishStartup();
-                    Me.run.timeouts.startupAnimation1 = null;
-                    return GLib.SOURCE_REMOVE;
-                });
-                Me.run.delayedStartup = true;
-                this._activateVShell();
-                // Since VShell has been activated with a delay, move it in extensionOrder
-                let extensionOrder = Main.extensionManager._extensionOrder;
-                const idx = extensionOrder.indexOf(this.metadata.uuid);
-                extensionOrder.push(extensionOrder.splice(idx, 1)[0]);
-                Main.layoutManager.disconnect(this._startupConId);
-                this._startupConId = null;
-                Me.run.timeouts.startupAnimation = null;
-                return GLib.SOURCE_REMOVE;
-            });
-        });
+        // V-Shell is activated immediately in enable() to prevent screen cover flicker on GNOME 50+
+        this._activateVShell();
     }
 
     _activateVShell() {
