@@ -1401,6 +1401,15 @@ export default class VShell extends ExtensionPreferences {
 
         optionList.push(
             itemFactory.getRowWidget(
+                _('Reorder Workspaces via Long Press'),
+                _('Allow reordering workspaces by long-pressing (> 0.5s) and dragging workspace thumbnails in the overview'),
+                itemFactory.newSwitch(),
+                'wstLongPressReorder'
+            )
+        );
+
+        optionList.push(
+            itemFactory.getRowWidget(
                 _('Workspace Preview')
             )
         );

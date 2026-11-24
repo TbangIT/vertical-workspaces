@@ -46,6 +46,9 @@
     <key type="i" name="close-ws-button-mode">
       <default>2</default>
     </key>
+    <key type="b" name="wst-long-press-reorder">
+      <default>true</default>
+    </key>
     <key type="b" name="center-dash-to-ws">
       <default>false</default>
     </key>
